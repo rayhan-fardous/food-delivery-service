@@ -47,25 +47,9 @@ const Add = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error("API Call Failed:", error); // See the exact error in the console
+      console.error("API Call Failed:", error);
       toast.error("Something went wrong. Check the console.");
     }
-
-    //  const response = await axios.post(`${url}/api/food/add`,formData);
-
-    //  if (response.data.success) {
-    //   setData({
-    //     name:"",
-    //     description:"",
-    //     price:"",
-    //     category:"Salad"
-    //   })
-    //   setImage(false)
-    //   toast.success(response.data.message)
-    //  }
-    //  else {
-    //   toast.error(response.data.message)
-    //  }
   };
 
   return (

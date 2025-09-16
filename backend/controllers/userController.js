@@ -1,11 +1,34 @@
-import userModel from "../models/userModel";
+import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import validator from "validator"
 
 // login user
-const loginUser = async (req,res) => {
+const loginUser = async (req, res) => {
+  const {email, password} = req.body;
+  try {
+    // Find user by email
+    const user = await userModel.findOne({email});
 
+    if (!user) {
+      return res.json({success: false, message: "User does not exist"});
+    }
+
+    // Check if password is correct
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.json({success: false, message: "Invalid credentials"});
+    }
+
+    // Create and send token
+    const token = createToken(user._id);
+    res.json({success: true, token});
+
+  } catch (error) {
+    console.log(error);
+    res.json({success: false, message: "Error"});
+  }
 }
 
 const createToken = (id) => {
@@ -19,7 +42,7 @@ const registerUser = async (req,res) => {
     // Checking if user already exixts
     const exists = await userModel.findOne({email});
     if (exists) {
-      return res,json({success:false,message:"User already exixts"})
+      return res.json({success:false,message:"User already exixts"})
     }
 
     // Validating email format & strong password
